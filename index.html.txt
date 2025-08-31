@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rastreador de Asistencia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+  <h1>Rastreador de Asistencia</h1>
+  
+  <div id="controls">
+    <input type="text" id="newSubject" placeholder="Añadir nuevo asignatura">
+    <button id="addSubject">Añadir</button>
+    <button id="markAllPresent">Estuve en todas las clases hoy</button>
+  </div>
+
+  <div id="subjects"></div>
+
+  <div id="stats">
+    <p>Asistido: <span id="presentPct">0%</span></p>
+    <p>Justificado: <span id="excusedPct">0%</span></p>
+    <p>No justificado: <span id="unexcusedPct">0%</span></p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+let subjects = [];
+const subjectsDiv = document.getElementById("subjects");
+const presentPct = document.getElementById("presentPct");
+const excusedPct = document.getElementById("excusedPct");
+const unexcusedPct = document.getElementById("unexcusedPct");
+
+let attendance = {}; // { "Matemáticas": "P", ... }
+
+function saveAttendance(){ localStorage.setItem("attendance", JSON.stringify(attendance)); }
+function loadAttendance(){
+  const data = localStorage.getItem("attendance");
+  if(data) attendance = JSON.parse(data);
+}
+
+function updateStats(){
+  let total = subjects.length;
+  let p=0,e=0,u=0;
+  subjects.forEach(sub=>{
+    const val = attendance[sub];
+    if(val==="P") p++;
+    else if(val==="E") e++;
+    else if(val==="U") u++;
+  });
+  presentPct.textContent = total?Math.round((p/total)*100)+"%":"0%";
+  excusedPct.textContent = total?Math.round((e/total)*100)+"%":"0%";
+  unexcusedPct.textContent = total?Math.round((u/total)*100)+"%":"0%";
+}
+
+function renderSubjects(){
+  subjectsDiv.innerHTML="";
+  subjects.forEach(sub=>{
+    const div = document.createElement("div");
+    div.textContent=sub+" ";
+    ["P","E","U"].forEach(code=>{
+      const btn = document.createElement("button");
+      btn.textContent=code;
+      btn.onclick=()=>{attendance[sub]=code; saveAttendance(); updateStats();}
+      div.appendChild(btn);
+    });
+    subjectsDiv.appendChild(div);
+  });
+}
+
+document.getElementById("markAllPresent").onclick = ()=>{
+  subjects.forEach(sub=>attendance[sub]="P");
+  saveAttendance();
+  updateStats();
+}
+
+document.getElementById("addSubject").onclick = ()=>{
+  const val = document.getElementById("newSubject").value.trim();
+  if(val && !subjects.includes(val)){
+    subjects.push(val);
+    attendance[val]="P"; // opcjonalnie możesz ustawić domyślnie "P"
+    saveAttendance();
+    renderSubjects();
+    updateStats();
+    document.getElementById("newSubject").value="";
+  }
+}
+
+loadAttendance();
+renderSubjects();
+updateStats();
